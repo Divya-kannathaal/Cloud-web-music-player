@@ -403,3 +403,39 @@ left_scrolls.addEventListener('click', ()=>{
 right_scrolls.addEventListener('click', ()=>{
     item.scrollLeft += 330;
 })
+// --- SEARCH FUNCTIONALITY ---
+
+const searchInput = document.getElementById("search");
+
+function searchAndPlaySong() {
+  const query = searchInput.value.toLowerCase().trim();
+  if (!query) return;
+
+  // Find song in list
+  const foundIndex = songs.findIndex(song =>
+    song.songName.toLowerCase().includes(query)
+  );
+
+  if (foundIndex !== -1) {
+    songIndex = foundIndex;
+    audioElement.src = songs[songIndex].filePath;
+    audioElement.play();
+    masterSongName.innerText = songs[songIndex].songName;
+    masterPlay.classList.remove("fa-play-circle");
+    masterPlay.classList.add("fa-pause-circle");
+    gif.style.opacity = 1;
+    makeAllPlays();
+    const playBtn = document.getElementsByClassName("songItemPlay")[songIndex];
+    playBtn.classList.remove("fa-play-circle");
+    playBtn.classList.add("fa-pause-circle");
+  } else {
+    alert("No song found with that name.");
+  }
+}
+
+// Trigger search when pressing Enter
+searchInput.addEventListener("keypress", event => {
+  if (event.key === "Enter") {
+    searchAndPlaySong();
+  }
+});
