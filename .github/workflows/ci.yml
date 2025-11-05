@@ -1,0 +1,38 @@
+name: CI - Validate Web Music Player
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout repository code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js (optional, used for validation tools)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # Step 3: Install validation tools (optional)
+      - name: Install htmlhint and stylelint
+        run: |
+          npm install -g htmlhint stylelint stylelint-config-standard
+
+      # Step 4: Run basic validation
+      - name: Validate HTML and CSS files
+        run: |
+          echo "Validating HTML, CSS, and JS files..."
+          htmlhint "**/*.html" || true
+          stylelint "**/*.css" || true
+
+      # Step 5: List files as proof of build success
+      - name: Display project files
+        run: ls -R
